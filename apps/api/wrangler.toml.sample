@@ -6,7 +6,7 @@ compatibility_date = "2024-10-30"
 # compatibility_flags = [ "nodejs_compat" ]
 
 # [vars]
-# MY_VAR = "my-variable"
+AUTH_SECRET="" # Added by `npx auth`. Read more: https://cli.authjs.dev
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
