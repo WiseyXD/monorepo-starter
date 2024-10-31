@@ -4,6 +4,7 @@ compatibility_date = "2024-10-30"
 
 # compatibility_flags = [ "nodejs_compat" ]
 
+# nothing just testing
 # [vars]
 # MY_VAR = "my-variable"
 
