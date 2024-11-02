@@ -36,12 +36,14 @@ export async function GET(request: NextRequest) {
   }
 
   const url = new URL("/", honoUrl);
-  const token = request.cookies.get("next-auth.session-token");
+  const token = request.cookies.get("authjs.session-token");
+  console.log(token);
+  const my = { token };
   try {
-    const honoResponse = await fetch(url.toString(), {
+    const honoResponse = await fetch(`${honoUrl}/auth/protected/`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${my}`,
         Accept: "application/json", // Requesting JSON as the response
       },
     });
