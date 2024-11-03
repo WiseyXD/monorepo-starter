@@ -1,41 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "../../../auth";
-
-// export async function GET(request: NextRequest) {
-//   const honoUrl = process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL;
-//   // Fetch the session (authentication) token if necessary
-//   /const token = request.cookies.get("next-auth.session-token");
-
-//   // Check if token exists (optional, depending on your authentication requirements)
-//   // if (!token) {
-//   //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-//   // }
-
-//   // Forward the request to the Hono backend
-//   console.log(honoUrl);
-//   try {
-//     const honoResponse = await fetch(`${honoUrl}`, {
-//       method: "GET",
-//       // headers: {
-//       //   Authorization: `Bearer ${token}`,
-//       // },
-//     });
-
-//     const data = await honoResponse.json();
-//     return NextResponse.json(data);
-//   } catch (error) {
-//     console.log(error);
-//     return NextResponse.json("nothing error");
-//   }
-// }
+import { auth, session } from "../../../auth";
 
 export async function GET(request: NextRequest) {
   const honoUrl = process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL;
-  const session = await auth();
+  const session: any = await auth();
   const newToken = session?.user?.jwt!;
   if (!honoUrl) {
     throw new Error("Backend URL is not defined in environment variables.");
   }
+  console.log(session);
 
   console.log(newToken);
   try {
