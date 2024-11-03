@@ -1,5 +1,6 @@
 import { createMiddleware } from "hono/factory";
 import { jwt, verify } from "hono/jwt";
+import { jwtVerify, importJWK } from "jose";
 
 type Bindings = {
   AUTH_SECRET: string;
@@ -15,8 +16,10 @@ export const verifyToken = createMiddleware<{ Bindings: Bindings }>(
     try {
       const token = authHeader.split(" ")[1];
       console.log(token);
-      const decoded = await verify(token, c.env.AUTH_SECRET);
-      console.log(decoded);
+      const secret = c.env.AUTH_SECRET;
+      const jwk = await importJWK({ k: secret, alg: "HS256", kty: "oct" });
+      const { payload } = await jwtVerify(token, jwk);
+      console.log(payload);
       await next();
     } catch (error) {
       return c.json({ error: "Invalid token" }, 403);

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "../../../auth";
 
 // export async function GET(request: NextRequest) {
 //   const honoUrl = process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL;
@@ -30,23 +31,22 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const honoUrl = process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL;
-
+  const session = await auth();
+  const newToken = session?.user?.jwt!;
   if (!honoUrl) {
     throw new Error("Backend URL is not defined in environment variables.");
   }
 
-  const token = request.cookies.get("authjs.session-token");
-  console.log(token);
+  console.log(newToken);
   try {
     const honoResponse = await fetch(`${honoUrl}/auth/protected`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token?.value}`,
+        Authorization: `Bearer ${newToken}`,
         Accept: "application/json",
       },
     });
 
-    // Check for non-JSON responses
     const contentType = honoResponse.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       const data = await honoResponse.json();
