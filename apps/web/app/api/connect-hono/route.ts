@@ -35,16 +35,14 @@ export async function GET(request: NextRequest) {
     throw new Error("Backend URL is not defined in environment variables.");
   }
 
-  const url = new URL("/", honoUrl);
   const token = request.cookies.get("authjs.session-token");
   console.log(token);
-  const my = { token };
   try {
-    const honoResponse = await fetch(`${honoUrl}/auth/protected/`, {
+    const honoResponse = await fetch(`${honoUrl}/auth/protected`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${my}`,
-        Accept: "application/json", // Requesting JSON as the response
+        Authorization: `Bearer ${token?.value}`,
+        Accept: "application/json",
       },
     });
 
