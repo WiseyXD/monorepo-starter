@@ -22,6 +22,7 @@ export const verifyToken = createMiddleware<{ Bindings: Bindings }>(
       console.log(payload);
       await next();
     } catch (error) {
+      console.log(error);
       return c.json({ error: "Invalid token" }, 403);
     }
   },
