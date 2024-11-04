@@ -53,6 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "database",
   },
+
   // callbacks: {
   //   async jwt({ token, user, account }): Promise<JWT> {
   //     const newToken = token as token;
