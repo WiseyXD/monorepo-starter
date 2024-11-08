@@ -1,26 +1,58 @@
-# Monorepo starter 
+# Monorepo Starter Guide
 
+This monorepo is designed to streamline development with multiple apps and shared packages, using TypeScript for consistent type safety across the entire codebase. It leverages [Turborepo](https://turbo.build/) for efficient build and development processes. Additionally, it uses [Prisma](https://www.prisma.io/) for database management, [ShadCN](https://shadcn.dev/) for UI components, and [Auth.js](https://authjs.dev/) for authentication on both client and server.
 
+## Apps and Packages
 
-### Apps and Packages
+- **`api`**: A [HonoJS](https://hono.dev/docs/getting-started/cloudflare-workers) app for server-side functionality.
+- **`web`**: A [Next.js](https://nextjs.org/) app for the frontend.
+- **`@repo/ui`**: A shared React component library.
+- **`@repo/eslint-config`**: Custom ESLint configurations including `eslint-config-next` and `eslint-config-prettier`.
+- **`@repo/typescript-config`**: Shared `tsconfig.json` files used throughout the monorepo.
+- **`@repo/db`**: Prisma configurations and schemas used for database management.
 
-- `api`: a [HonoJS](https://hono.dev/docs/getting-started/cloudflare-workers) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` 
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-- `@repo/prisma`: `prisma` used throughout the monorepo
+Each app and package is fully written in [TypeScript](https://www.typescriptlang.org/).
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+---
 
-### Utilities
+## Development Utilities
 
-This Turborepo has some additional tools already setup for you:
+This Turborepo setup includes:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- **TypeScript** for static type checking.
+- **ESLint** for code linting.
+- **Prettier** for code formatting consistency.
 
+## Setup Instructions
+
+### Next.js Client Setup (`web`)
+
+Copy `.env.local.sample` to `.env.local`:
+```
+cp .env.local.sample .env.local
+```
+and then execute
+
+```
+bunx auth secret
+```
+Once the auth secret is created add all the other neccesary field in the `.env.local` file.
+
+If you want to setup other Oauth provider please refer the [AuthJS docs](https://authjs.dev/getting-started/installation).
+
+### Hono server setup
+Exectute 
+````
+cp wrangler.toml.sample wrangler.toml  
+````
+then execute 
+````
+touch .dev.vars  
+``````
+
+copy the `AUTH_SECRET` from the .env.local of the `apps/web` to `apps/api/wrangler.toml` and `apps/api/.dev.vars`
+
+Once the auth secret is created add all the other neccesary field in the `.dev.vars` and `wrangler.toml` file.
 ### Install
 
 ```
@@ -45,6 +77,25 @@ To develop all apps and packages, run the following command:
 cd monorepo
 bun dev
 ```
+
+### Add a new package in the repo
+
+Create a new package in the `packages` directory
+then create a ts project inside it using  
+```
+npm --init -y 
+
+or
+
+bun init
+```
+change the name field to 
+```
+name : '@repo/{packagename}'
+```
+also add the exports in package.json file of newly created package.
+
+For more info how to create a package please refer the `packages/db` package of the project.
 
 ### Remote Caching
 
