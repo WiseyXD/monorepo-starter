@@ -18,19 +18,20 @@ interface token extends JWT {
   jwt: string;
   uid: string;
 }
-interface CustomSession extends Session {
-  user: {
-    jwt: string;
-    id: string;
-    email: string;
-    name: string;
-  };
-}
 
-interface CustomToken extends JWT {
-  jwt: string;
-  uid: string;
-}
+// interface CustomSession extends Session {
+//   user: {
+//     jwt: string;
+//     id: string;
+//     email: string;
+//     name: string;
+//   };
+// }
+
+// interface CustomToken extends JWT {
+//   jwt: string;
+//   uid: string;
+// }
 
 const generateJWT = async (payload: any) => {
   const secret = process.env.AUTH_SECRET;
@@ -84,36 +85,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   //     return newSession;
   //   },
   // },
+  callbacks: {
+    async session({ session, token, user }): Promise<Session> {
+      const customSession = session as Session;
 
-  // callbacks: {
-  //   async jwt({ token, user, account }): Promise<JWT> {
-  //     const newToken = token as CustomToken;
+      // Ensure user object exists in the session
+      if (!customSession.user) {
+        customSession.user = {};
+      }
 
-  //     if (user) {
-  //       // Generate a new JWT with user details on initial sign-in
-  //       const jwt = await generateJWT({
-  //         id: user.id,
-  //         name: user.name,
-  //         email: user.email,
-  //       });
-  //       newToken.jwt = jwt;
-  //       newToken.uid = user.id; // Store the user ID as well
-  //     }
+      // console.log("session callback" + JSON.stringify(customSession.user));
 
-  //     return newToken;
-  //   },
-  //   async session({ session, token }): Promise<Session> {
-  //     const customSession = session as CustomSession;
-  //     const customToken = token as CustomToken;
+      // Generate JWT and attach it to session.user.jwt
+      const jwt = await generateJWT({
+        id: customSession.user.id,
+        name: customSession.user.name,
+        image: customSession.user.email,
+      });
 
-  //     // Safely attach JWT and ID only if they exist in the token
-  //     customSession.user = {
-  //       ...customSession.user,
-  //       jwt: customToken.jwt ?? undefined,
-  //       id: customToken.uid ?? undefined,
-  //     };
+      customSession.user.jwt = jwt;
 
-  //     return customSession;
-  //   },
-  // },
+      return customSession;
+    },
+  },
 });

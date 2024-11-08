@@ -5,12 +5,11 @@ export async function GET(request: NextRequest) {
   const honoUrl = process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL;
   const session: any = await auth();
   const newToken = session?.user?.jwt!;
+
   if (!honoUrl) {
     throw new Error("Backend URL is not defined in environment variables.");
   }
-  console.log(session);
 
-  console.log(newToken);
   try {
     const honoResponse = await fetch(`${honoUrl}/auth/protected`, {
       method: "GET",
