@@ -9,7 +9,7 @@ export interface session extends Session {
   user: {
     jwt: string;
     id: string;
-    email: string;
+    image: string;
     name: string;
   };
 }
@@ -18,20 +18,6 @@ interface token extends JWT {
   jwt: string;
   uid: string;
 }
-
-// interface CustomSession extends Session {
-//   user: {
-//     jwt: string;
-//     id: string;
-//     email: string;
-//     name: string;
-//   };
-// }
-
-// interface CustomToken extends JWT {
-//   jwt: string;
-//   uid: string;
-// }
 
 const generateJWT = async (payload: any) => {
   const secret = process.env.AUTH_SECRET;
@@ -55,48 +41,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "database",
   },
 
-  // callbacks: {
-  //   async jwt({ token, user, account }): Promise<JWT> {
-  //     const newToken = token as token;
-  //     newToken.uid = token.sub ?? "nosub";
-  //     console.log(token);
-
-  //     if (token.sub) {
-  //       const jwt = await generateJWT({
-  //         id: token.sub,
-  //         name: token.name,
-  //         image: token.picture,
-  //       });
-  //       newToken.jwt = jwt;
-  //     } else {
-  //       console.warn("No sub found in token; jwt will be undefined");
-  //     }
-  //     return newToken;
-  //   },
-  //   async session({ session, token }): Promise<Session> {
-  //     // @ts-ignore
-  //     const newSession = session as session;
-  //     const newToken = token as token;
-
-  //     // Attaching id and jwt to session user object
-  //     newSession.user.jwt = newToken.jwt;
-  //     newSession.user.id = newToken.uid;
-
-  //     return newSession;
-  //   },
-  // },
   callbacks: {
     async session({ session, token, user }): Promise<Session> {
-      const customSession = session as Session;
+      const customSession = session as any;
 
-      // Ensure user object exists in the session
       if (!customSession.user) {
         customSession.user = {};
       }
 
-      // console.log("session callback" + JSON.stringify(customSession.user));
-
-      // Generate JWT and attach it to session.user.jwt
       const jwt = await generateJWT({
         id: customSession.user.id,
         name: customSession.user.name,

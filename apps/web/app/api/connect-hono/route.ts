@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth, session } from "../../../auth";
+import { auth } from "../../../auth";
 
 export async function GET(request: NextRequest) {
   const honoUrl = process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL;
