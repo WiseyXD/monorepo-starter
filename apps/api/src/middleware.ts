@@ -4,6 +4,10 @@ import { jwtVerify, importJWK } from "jose";
 
 type Bindings = {
   AUTH_SECRET: string;
+  USER: {
+    id: string;
+    name: string;
+  };
 };
 
 export const verifyToken = createMiddleware<{ Bindings: Bindings }>(
@@ -17,6 +21,8 @@ export const verifyToken = createMiddleware<{ Bindings: Bindings }>(
       const secret = c.env.AUTH_SECRET;
       const jwk = await importJWK({ k: secret, alg: "HS256", kty: "oct" });
       const { payload } = await jwtVerify(token, jwk);
+      console.log(payload);
+      c.set("USER", payload);
       await next();
     } catch (error) {
       console.log(error);
