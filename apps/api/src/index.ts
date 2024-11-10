@@ -1,13 +1,10 @@
 import { Hono } from "hono";
-import prisma from "@repo/db/api";
+import { getPrisma } from "./db";
 import { logger } from "hono/logger";
 import type { JwtVariables } from "hono/jwt";
 import { verifyToken } from "./middleware";
-type Bindings = {
-  AUTH_SECRET: string;
-  JWT_VARIABLE: JwtVariables;
-  USER: string;
-};
+
+type Bindings = {};
 
 const app = new Hono<{ Bindings: Bindings }>();
 
@@ -17,6 +14,7 @@ app.use("/auth/*", verifyToken);
 
 app.get("/auth/protected", async (c) => {
   const userId = c.get("USER").id;
+  const prisma = getPrisma(c);
   const user = await prisma.user.findUnique({
     where: {
       id: userId,
