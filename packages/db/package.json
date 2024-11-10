@@ -3,7 +3,8 @@
   "module": "src/index.ts",
   "type": "module",
   "exports": {
-    "./client": "./src/index.ts"
+    "./client": "./src/index.ts",
+    "./api" : "./src/api.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
