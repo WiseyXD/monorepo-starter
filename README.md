@@ -23,6 +23,11 @@ This Turborepo setup includes:
 - **ESLint** for code linting.
 - **Prettier** for code formatting consistency.
 
+## Pre-requsite
+
+Create a free postgres on [NeonDB](https://console.neon.tech/app/projects)
+
+if want to use another db, then please change auth adapter inside the `auth.ts` file of the `web` app and also change the db configuration in `db` package.
 ## Setup Instructions
 
 ### Next.js Client Setup (`web`)
