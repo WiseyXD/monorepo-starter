@@ -1,7 +1,9 @@
 import { Hono } from "hono";
 import { getPrisma } from "./db";
+
+// TODO:try to get the db direstly from client import
+
 import { logger } from "hono/logger";
-import type { JwtVariables } from "hono/jwt";
 import { verifyToken } from "./middleware";
 
 type Bindings = {};
