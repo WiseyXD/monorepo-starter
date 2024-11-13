@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { getPrisma } from "./db";
 
-// TODO:try to get the db direstly from client import
+// TODO:try to get the db directly from ./client import
 
 import { logger } from "hono/logger";
 import { verifyToken } from "./middleware";
